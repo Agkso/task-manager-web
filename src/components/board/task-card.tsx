@@ -25,7 +25,7 @@ export function TaskCard({ tarefa, onClick }: { tarefa: RespostaTarefa; onClick:
         transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined
       }
       className={cn(
-        'cursor-grab touch-none py-3 active:cursor-grabbing',
+        'cursor-grab touch-none gap-2 py-3 shadow-sm transition-shadow hover:shadow-md active:cursor-grabbing',
         isDragging && 'z-10 opacity-60 shadow-lg',
       )}
     >
