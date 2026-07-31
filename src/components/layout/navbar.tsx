@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Logo } from '@/components/brand/logo'
 import { useAuth } from '@/hooks/use-auth'
 
 function iniciais(nome: string) {
@@ -18,8 +19,8 @@ export function Navbar() {
   return (
     <header className="border-b">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link to="/projetos" className="font-semibold tracking-tight">
-          Task Manager
+        <Link to="/projetos">
+          <Logo />
         </Link>
         {usuario && (
           <div className="flex items-center gap-3">

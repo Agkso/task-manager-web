@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Navbar } from '@/components/layout/navbar'
+import { PageHeader } from '@/components/common/page-header'
 import { BoardColumn, COLUNAS } from '@/components/board/board-column'
 import { CreateTaskDialog } from '@/components/board/create-task-dialog'
 import { TaskDetailDialog } from '@/components/board/task-detail-dialog'
@@ -74,21 +73,17 @@ export function BoardPage() {
     <div className="min-h-svh">
       <Navbar />
       <main className="mx-auto max-w-6xl p-6">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Button asChild variant="ghost" size="icon">
-              <Link to="/projetos" aria-label="Voltar">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            <h1 className="text-xl font-semibold tracking-tight">{projeto?.nome ?? 'Carregando...'}</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <MembersDialog projetoId={projetoId} />
-            <AuditLogDialog projetoId={projetoId} />
-            <CreateTaskDialog projetoId={projetoId} />
-          </div>
-        </div>
+        <PageHeader
+          title={projeto?.nome ?? 'Carregando...'}
+          backTo="/projetos"
+          actions={
+            <>
+              <MembersDialog projetoId={projetoId} />
+              <AuditLogDialog projetoId={projetoId} />
+              <CreateTaskDialog projetoId={projetoId} />
+            </>
+          }
+        />
 
         {isLoading ? (
           <div className="grid gap-4 sm:grid-cols-3">
@@ -104,6 +99,7 @@ export function BoardPage() {
                   key={coluna.status}
                   status={coluna.status}
                   titulo={coluna.titulo}
+                  corPonto={coluna.corPonto}
                   tarefas={pagina?.conteudo.filter((t) => t.status === coluna.status) ?? []}
                   onSelecionarTarefa={setTarefaSelecionada}
                 />
