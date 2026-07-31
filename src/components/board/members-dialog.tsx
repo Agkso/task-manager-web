@@ -1,12 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Users, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectField } from '@/components/common/select-field'
 import {
   Dialog,
   DialogContent,
@@ -15,48 +13,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { projetosApi } from '@/lib/resources'
-import { mensagemDeErro } from '@/lib/api'
+import { useProjectMembers, useAddMember, useRemoveMember } from '@/hooks/use-project-members'
 import { useAuth } from '@/hooks/use-auth'
+import { OPCOES_PAPEL } from '@/lib/options'
 import type { Papel } from '@/types/api'
 
 export function MembersDialog({ projetoId }: { projetoId: number }) {
   const [aberto, setAberto] = useState(false)
   const [email, setEmail] = useState('')
   const [papel, setPapel] = useState<Papel>('MEMBER')
-  const queryClient = useQueryClient()
   const { usuario } = useAuth()
 
-  const { data: membros } = useQuery({
-    queryKey: ['membros', projetoId],
-    queryFn: () => projetosApi.listarMembros(projetoId),
-    enabled: aberto,
-  })
+  const { data: membros } = useProjectMembers(projetoId, { enabled: aberto })
+  const { mutate: adicionar, isPending } = useAddMember(projetoId)
+  const { mutate: remover } = useRemoveMember(projetoId)
 
   const souAdmin = membros?.some((m) => m.usuarioId === usuario?.usuarioId && m.papel === 'ADMIN') ?? false
 
-  const { mutate: adicionar, isPending } = useMutation({
-    mutationFn: () => projetosApi.adicionarMembro(projetoId, { email, papel }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membros', projetoId] })
-      toast.success('Membro adicionado')
-      setEmail('')
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel adicionar')),
-  })
-
-  const { mutate: remover } = useMutation({
-    mutationFn: (usuarioId: number) => projetosApi.removerMembro(projetoId, usuarioId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['membros', projetoId] })
-      toast.success('Membro removido')
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel remover')),
-  })
-
   function aoSubmeter(evento: FormEvent) {
     evento.preventDefault()
-    adicionar()
+    adicionar({ email, papel }, { onSuccess: () => setEmail('') })
   }
 
   return (
@@ -111,15 +87,7 @@ export function MembersDialog({ projetoId }: { projetoId: number }) {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <Select value={papel} onValueChange={(v) => setPapel(v as Papel)}>
-              <SelectTrigger className="w-28">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="MEMBER">Membro</SelectItem>
-                <SelectItem value="ADMIN">Admin</SelectItem>
-              </SelectContent>
-            </Select>
+            <SelectField className="w-28" value={papel} onChange={setPapel} options={OPCOES_PAPEL} />
             <Button type="submit" disabled={isPending}>
               Adicionar
             </Button>

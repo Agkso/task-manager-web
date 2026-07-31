@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectField } from '@/components/common/select-field'
+import { DatePicker } from '@/components/common/date-picker'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -21,11 +20,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { projetosApi, tarefasApi } from '@/lib/resources'
-import { mensagemDeErro } from '@/lib/api'
+import { useProjectMembers } from '@/hooks/use-project-members'
+import { useUpdateTask, useDeleteTask } from '@/hooks/use-task-mutations'
+import { useTaskHistory } from '@/hooks/use-task-history'
+import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/lib/options'
 import type { Prioridade, RespostaTarefa } from '@/types/api'
-
-const SEM_RESPONSAVEL = 'nenhum'
 
 function paraInputDate(iso: string | null) {
   return iso ? iso.slice(0, 10) : ''
@@ -40,7 +39,6 @@ export function TaskDetailDialog({
   tarefa: RespostaTarefa | null
   onOpenChange: (aberto: boolean) => void
 }) {
-  const queryClient = useQueryClient()
   const [titulo, setTitulo] = useState('')
   const [descricao, setDescricao] = useState('')
   const [prioridade, setPrioridade] = useState<Prioridade>('MEDIUM')
@@ -57,44 +55,32 @@ export function TaskDetailDialog({
     }
   }, [tarefa])
 
-  const { data: membros } = useQuery({
-    queryKey: ['membros', projetoId],
-    queryFn: () => projetosApi.listarMembros(projetoId),
-    enabled: Boolean(tarefa),
-  })
+  const { data: membros } = useProjectMembers(projetoId, { enabled: Boolean(tarefa) })
+  const { data: historico } = useTaskHistory(projetoId, tarefa?.id, { enabled: Boolean(tarefa) })
+  const { mutate: salvar, isPending: salvando } = useUpdateTask(projetoId)
+  const { mutate: excluir, isPending: excluindo } = useDeleteTask(projetoId)
 
-  const { data: historico } = useQuery({
-    queryKey: ['historico', projetoId, tarefa?.id],
-    queryFn: () => tarefasApi.historico(projetoId, tarefa!.id),
-    enabled: Boolean(tarefa),
-  })
+  function aoSalvar() {
+    if (!tarefa) return
+    salvar(
+      {
+        tarefaId: tarefa.id,
+        dados: {
+          titulo,
+          descricao: descricao || undefined,
+          prioridade,
+          prazo: prazo ? new Date(prazo).toISOString() : undefined,
+          responsavelId: responsavelId === SEM_RESPONSAVEL ? undefined : Number(responsavelId),
+        },
+      },
+      { onSuccess: () => onOpenChange(false) },
+    )
+  }
 
-  const { mutate: salvar, isPending: salvando } = useMutation({
-    mutationFn: () =>
-      tarefasApi.atualizar(projetoId, tarefa!.id, {
-        titulo,
-        descricao: descricao || undefined,
-        prioridade,
-        prazo: prazo ? new Date(prazo).toISOString() : undefined,
-        responsavelId: responsavelId === SEM_RESPONSAVEL ? undefined : Number(responsavelId),
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tarefas', projetoId] })
-      toast.success('Tarefa atualizada')
-      onOpenChange(false)
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel atualizar a tarefa')),
-  })
-
-  const { mutate: excluir, isPending: excluindo } = useMutation({
-    mutationFn: () => tarefasApi.excluir(projetoId, tarefa!.id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tarefas', projetoId] })
-      toast.success('Tarefa excluida')
-      onOpenChange(false)
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel excluir a tarefa')),
-  })
+  function aoExcluir() {
+    if (!tarefa) return
+    excluir(tarefa.id, { onSuccess: () => onOpenChange(false) })
+  }
 
   return (
     <Dialog open={Boolean(tarefa)} onOpenChange={onOpenChange}>
@@ -112,41 +98,28 @@ export function TaskDetailDialog({
             <Textarea id="descricao-edicao" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Prioridade</Label>
-              <Select value={prioridade} onValueChange={(v) => setPrioridade(v as Prioridade)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="LOW">Baixa</SelectItem>
-                  <SelectItem value="MEDIUM">Media</SelectItem>
-                  <SelectItem value="HIGH">Alta</SelectItem>
-                  <SelectItem value="CRITICAL">Critica</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <SelectField
+              id="prioridade-edicao"
+              label="Prioridade"
+              value={prioridade}
+              onChange={setPrioridade}
+              options={OPCOES_PRIORIDADE}
+            />
             <div className="flex flex-col gap-2">
               <Label htmlFor="prazo-edicao">Prazo</Label>
-              <Input id="prazo-edicao" type="date" value={prazo} onChange={(e) => setPrazo(e.target.value)} />
+              <DatePicker id="prazo-edicao" value={prazo} onChange={setPrazo} />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label>Responsavel</Label>
-            <Select value={responsavelId} onValueChange={setResponsavelId}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={SEM_RESPONSAVEL}>Sem responsavel</SelectItem>
-                {membros?.map((membro) => (
-                  <SelectItem key={membro.usuarioId} value={String(membro.usuarioId)}>
-                    {membro.nome}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectField
+            id="responsavel-edicao"
+            label="Responsavel"
+            value={responsavelId}
+            onChange={setResponsavelId}
+            options={[
+              { value: SEM_RESPONSAVEL, label: 'Sem responsavel' },
+              ...(membros?.map((m) => ({ value: String(m.usuarioId), label: m.nome })) ?? []),
+            ]}
+          />
 
           {historico && historico.length > 0 && (
             <>
@@ -182,13 +155,13 @@ export function TaskDetailDialog({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction disabled={excluindo} onClick={() => excluir()}>
+                  <AlertDialogAction disabled={excluindo} onClick={aoExcluir}>
                     Excluir
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button type="button" disabled={salvando} onClick={() => salvar()}>
+            <Button type="button" disabled={salvando} onClick={aoSalvar}>
               {salvando ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>

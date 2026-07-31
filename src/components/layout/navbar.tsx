@@ -3,7 +3,7 @@ import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Logo } from '@/components/brand/logo'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth, useLogout } from '@/hooks/use-auth'
 
 function iniciais(nome: string) {
   return nome
@@ -14,7 +14,8 @@ function iniciais(nome: string) {
 }
 
 export function Navbar() {
-  const { usuario, logout } = useAuth()
+  const { usuario } = useAuth()
+  const { mutate: logout } = useLogout()
 
   return (
     <header className="border-b">
@@ -28,7 +29,7 @@ export function Navbar() {
               <AvatarFallback className="text-xs">{iniciais(usuario.nome)}</AvatarFallback>
             </Avatar>
             <span className="hidden text-sm text-muted-foreground sm:inline">{usuario.nome}</span>
-            <Button variant="ghost" size="icon" onClick={logout} aria-label="Sair">
+            <Button variant="ghost" size="icon" onClick={() => logout()} aria-label="Sair">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>

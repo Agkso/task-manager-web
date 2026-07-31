@@ -1,30 +1,20 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AuthLayout } from '@/components/layout/auth-layout'
-import { useAuth } from '@/hooks/use-auth'
-import { mensagemDeErro } from '@/lib/api'
+import { useRegister } from '@/hooks/use-auth'
 
 export function RegisterPage() {
-  const { registrar } = useAuth()
+  const { mutate: registrar, isPending } = useRegister()
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [carregando, setCarregando] = useState(false)
 
-  async function aoSubmeter(evento: FormEvent) {
+  function aoSubmeter(evento: FormEvent) {
     evento.preventDefault()
-    setCarregando(true)
-    try {
-      await registrar({ nome, email, senha })
-    } catch (erro) {
-      toast.error(mensagemDeErro(erro, 'Nao foi possivel criar a conta'))
-    } finally {
-      setCarregando(false)
-    }
+    registrar({ nome, email, senha })
   }
 
   return (
@@ -62,8 +52,8 @@ export function RegisterPage() {
           />
           <p className="text-xs text-muted-foreground">Minimo 8 caracteres</p>
         </div>
-        <Button type="submit" disabled={carregando} className="mt-2">
-          {carregando ? 'Criando...' : 'Criar conta'}
+        <Button type="submit" disabled={isPending} className="mt-2">
+          {isPending ? 'Criando...' : 'Criar conta'}
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">

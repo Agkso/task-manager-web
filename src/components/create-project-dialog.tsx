@@ -1,6 +1,4 @@
 import { useState, type FormEvent } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,30 +13,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { projetosApi } from '@/lib/resources'
-import { mensagemDeErro } from '@/lib/api'
+import { useCreateProject } from '@/hooks/use-projects'
 
 export function CreateProjectDialog() {
   const [aberto, setAberto] = useState(false)
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
-  const queryClient = useQueryClient()
+  const { mutate: criar, isPending } = useCreateProject()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: () => projetosApi.criar({ nome, descricao: descricao || undefined }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projetos'] })
-      toast.success('Projeto criado')
-      setAberto(false)
-      setNome('')
-      setDescricao('')
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel criar o projeto')),
-  })
+  function limparEFechar() {
+    setAberto(false)
+    setNome('')
+    setDescricao('')
+  }
 
   function aoSubmeter(evento: FormEvent) {
     evento.preventDefault()
-    mutate()
+    criar({ nome, descricao: descricao || undefined }, { onSuccess: limparEFechar })
   }
 
   return (

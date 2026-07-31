@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { ScrollText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { projetosApi } from '@/lib/resources'
+import { useProjectAudit } from '@/hooks/use-project-audit'
 
 const rotulosAcao: Record<string, string> = {
   PROJETO_CRIADO: 'Projeto criado',
@@ -29,12 +28,7 @@ const rotulosAcao: Record<string, string> = {
 
 export function AuditLogDialog({ projetoId }: { projetoId: number }) {
   const [aberto, setAberto] = useState(false)
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['auditoria', projetoId],
-    queryFn: () => projetosApi.auditoria(projetoId),
-    enabled: aberto,
-  })
+  const { data, isLoading, isError } = useProjectAudit(projetoId, { enabled: aberto })
 
   return (
     <Dialog open={aberto} onOpenChange={setAberto}>

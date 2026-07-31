@@ -1,29 +1,19 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AuthLayout } from '@/components/layout/auth-layout'
-import { useAuth } from '@/hooks/use-auth'
-import { mensagemDeErro } from '@/lib/api'
+import { useLogin } from '@/hooks/use-auth'
 
 export function LoginPage() {
-  const { login } = useAuth()
+  const { mutate: login, isPending } = useLogin()
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [carregando, setCarregando] = useState(false)
 
-  async function aoSubmeter(evento: FormEvent) {
+  function aoSubmeter(evento: FormEvent) {
     evento.preventDefault()
-    setCarregando(true)
-    try {
-      await login({ email, senha })
-    } catch (erro) {
-      toast.error(mensagemDeErro(erro, 'Email ou senha incorretos'))
-    } finally {
-      setCarregando(false)
-    }
+    login({ email, senha })
   }
 
   return (
@@ -55,8 +45,8 @@ export function LoginPage() {
             autoComplete="current-password"
           />
         </div>
-        <Button type="submit" disabled={carregando} className="mt-2">
-          {carregando ? 'Entrando...' : 'Entrar'}
+        <Button type="submit" disabled={isPending} className="mt-2">
+          {isPending ? 'Entrando...' : 'Entrar'}
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">

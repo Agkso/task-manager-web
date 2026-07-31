@@ -1,12 +1,11 @@
 import { useState, type FormEvent } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectField } from '@/components/common/select-field'
+import { DatePicker } from '@/components/common/date-picker'
 import {
   Dialog,
   DialogContent,
@@ -15,11 +14,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { projetosApi, tarefasApi } from '@/lib/resources'
-import { mensagemDeErro } from '@/lib/api'
+import { useProjectMembers } from '@/hooks/use-project-members'
+import { useCreateTask } from '@/hooks/use-task-mutations'
+import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/lib/options'
 import type { Prioridade } from '@/types/api'
-
-const SEM_RESPONSAVEL = 'nenhum'
 
 export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
   const [aberto, setAberto] = useState(false)
@@ -28,30 +26,9 @@ export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
   const [prioridade, setPrioridade] = useState<Prioridade>('MEDIUM')
   const [prazo, setPrazo] = useState('')
   const [responsavelId, setResponsavelId] = useState(SEM_RESPONSAVEL)
-  const queryClient = useQueryClient()
 
-  const { data: membros } = useQuery({
-    queryKey: ['membros', projetoId],
-    queryFn: () => projetosApi.listarMembros(projetoId),
-    enabled: aberto,
-  })
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: () =>
-      tarefasApi.criar(projetoId, {
-        titulo,
-        descricao: descricao || undefined,
-        prioridade,
-        prazo: prazo ? new Date(prazo).toISOString() : undefined,
-        responsavelId: responsavelId === SEM_RESPONSAVEL ? undefined : Number(responsavelId),
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tarefas', projetoId] })
-      toast.success('Tarefa criada')
-      limparEFechar()
-    },
-    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel criar a tarefa')),
-  })
+  const { data: membros } = useProjectMembers(projetoId, { enabled: aberto })
+  const { mutate: criar, isPending } = useCreateTask(projetoId)
 
   function limparEFechar() {
     setAberto(false)
@@ -64,7 +41,16 @@ export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
 
   function aoSubmeter(evento: FormEvent) {
     evento.preventDefault()
-    mutate()
+    criar(
+      {
+        titulo,
+        descricao: descricao || undefined,
+        prioridade,
+        prazo: prazo ? new Date(prazo).toISOString() : undefined,
+        responsavelId: responsavelId === SEM_RESPONSAVEL ? undefined : Number(responsavelId),
+      },
+      { onSuccess: limparEFechar },
+    )
   }
 
   return (
@@ -90,46 +76,28 @@ export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
               <Textarea id="descricao-tarefa" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <Label>Prioridade</Label>
-                <Select value={prioridade} onValueChange={(v) => setPrioridade(v as Prioridade)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LOW">Baixa</SelectItem>
-                    <SelectItem value="MEDIUM">Media</SelectItem>
-                    <SelectItem value="HIGH">Alta</SelectItem>
-                    <SelectItem value="CRITICAL">Critica</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <SelectField
+                id="prioridade-tarefa"
+                label="Prioridade"
+                value={prioridade}
+                onChange={setPrioridade}
+                options={OPCOES_PRIORIDADE}
+              />
               <div className="flex flex-col gap-2">
                 <Label htmlFor="prazo-tarefa">Prazo</Label>
-                <Input
-                  id="prazo-tarefa"
-                  type="date"
-                  value={prazo}
-                  onChange={(e) => setPrazo(e.target.value)}
-                />
+                <DatePicker id="prazo-tarefa" value={prazo} onChange={setPrazo} />
               </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label>Responsavel</Label>
-              <Select value={responsavelId} onValueChange={setResponsavelId}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={SEM_RESPONSAVEL}>Sem responsavel</SelectItem>
-                  {membros?.map((membro) => (
-                    <SelectItem key={membro.usuarioId} value={String(membro.usuarioId)}>
-                      {membro.nome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <SelectField
+              id="responsavel-tarefa"
+              label="Responsavel"
+              value={responsavelId}
+              onChange={setResponsavelId}
+              options={[
+                { value: SEM_RESPONSAVEL, label: 'Sem responsavel' },
+                ...(membros?.map((m) => ({ value: String(m.usuarioId), label: m.nome })) ?? []),
+              ]}
+            />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={isPending}>
