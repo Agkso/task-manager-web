@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/stores/auth-store'
+import { queryKeys } from '@/lib/query-keys'
 
 const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
 
@@ -22,7 +23,7 @@ export function useTaskEvents(projetoId: number) {
     const eventSource = new EventSource(url)
 
     eventSource.addEventListener('status-alterado', () => {
-      queryClient.invalidateQueries({ queryKey: ['tarefas', projetoId] })
+      queryClient.invalidateQueries({ queryKey: queryKeys.tarefas(projetoId) })
     })
 
     // EventSource reconecta sozinho em erro de rede/timeout - nao precisa de logica extra aqui
