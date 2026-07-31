@@ -3,12 +3,6 @@ import { TaskCard } from '@/components/board/task-card'
 import type { RespostaTarefa, StatusTarefa } from '@/types/api'
 import { cn } from '@/lib/utils'
 
-export const COLUNAS: { status: StatusTarefa; titulo: string; corPonto: string }[] = [
-  { status: 'TODO', titulo: 'A fazer', corPonto: 'bg-status-todo' },
-  { status: 'IN_PROGRESS', titulo: 'Em andamento', corPonto: 'bg-status-progress' },
-  { status: 'DONE', titulo: 'Concluido', corPonto: 'bg-status-done' },
-]
-
 export function BoardColumn({
   status,
   titulo,
