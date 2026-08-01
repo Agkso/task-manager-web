@@ -30,18 +30,36 @@ npm run dev
 
 ## Arquitetura
 
-- `src/lib/api.ts` - instância axios com interceptor de `Authorization` e renovação automática de token via refresh token.
-- `src/stores/auth-store.ts` + `src/hooks/use-auth.ts` - sessão do usuário (zustand + persist), com uma API parecida com `useSession()`/`signIn()`/`signOut()` do NextAuth (não dá pra usar a lib de verdade aqui - é feita pra Next.js).
-- `src/lib/resources.ts` - todas as chamadas HTTP pra API, organizadas por recurso (`projetosApi`, `tarefasApi`).
-- `src/hooks/use-task-events.ts` - assina o stream SSE de mudança de status de tarefa e invalida a query do React Query correspondente.
-- `src/components/board/` - board (colunas, cards, dialogs de criar/editar tarefa, membros, auditoria, relatório).
+Organização **por feature/domínio**, não por tipo de arquivo - `hooks/`, `lib/` e `components/` genéricos misturando auth+projetos+tarefas no mesmo balaio escondiam onde cada coisa realmente pertence e viravam gaveta de miscelânea. Cada feature é dona dos seus próprios componentes, hooks, API calls, query keys e tipos:
+
+```
+src/
+  app/               bootstrap (main.tsx, App.tsx/rotas, index.css)
+  features/
+    auth/            login, registro, sessão (zustand + persist), decode de JWT
+    projetos/         listagem/CRUD de projeto, membros, auditoria
+    board/            board de tarefas, dialogs, relatório, eventos SSE
+  shared/
+    ui/              componentes shadcn (Button, Dialog, Select, ...) - não editados a mão
+    components/      Logo, Navbar, PageHeader, DatePicker, EmptyState, SelectField
+    lib/             axios (api.ts), query-client, cn()/utils
+    types/           só o que é realmente cross-feature (PaginaResposta<T>, ProblemDetail)
+```
+
+Dentro de cada feature: `components/` (UI), `hooks/` (dados/mutations), `api/` (chamadas HTTP + query keys daquele domínio), e `types.ts`/`options.ts` na raiz da feature quando não justificam uma subpasta.
+
+- `src/shared/lib/api.ts` - instância axios com interceptor de `Authorization` e renovação automática de token via refresh token.
+- `src/features/auth/store/auth-store.ts` + `src/features/auth/hooks/use-auth.ts` - sessão do usuário (zustand + persist), com uma API parecida com `useSession()`/`signIn()`/`signOut()` do NextAuth (não dá pra usar a lib de verdade aqui - é feita pra Next.js).
+- `src/features/projetos/api/projetos-api.ts` e `src/features/board/api/tarefas-api.ts` - chamadas HTTP por domínio (cada um já era um recurso de API separado no backend).
+- `src/features/board/hooks/use-task-events.ts` - assina o stream SSE de mudança de status de tarefa e invalida a query do React Query correspondente.
+- `src/features/board/components/` - board (colunas, cards, dialogs de criar/editar tarefa, relatório).
 
 ## Cache e invalidação (listagem de tarefas e relatório)
 
-O cache de dados do servidor é todo via `@tanstack/react-query` (`src/lib/query-client.ts`), com uma estratégia deliberadamente **baseada em invalidação por evento**, não em polling nem em `staleTime` curto:
+O cache de dados do servidor é todo via `@tanstack/react-query` (`src/shared/lib/query-client.ts`), com uma estratégia deliberadamente **baseada em invalidação por evento**, não em polling nem em `staleTime` curto:
 
 - **`staleTime` global de 30s** (`query-client.ts`) é só uma rede de segurança contra refetch redundante (ex.: trocar de aba e voltar) - não é o mecanismo que garante dado atualizado.
-- **Mutations invalidam explicitamente as queries que elas afetam.** Criar/atualizar/excluir/mover tarefa invalida `queryKeys.tarefas(projetoId)` e `queryKeys.relatorio(projetoId)` juntos (`use-task-mutations.ts`, `use-tasks.ts`) - o relatório é uma agregação da mesma tabela de tarefas, então qualquer escrita que muda a listagem também pode mudar as contagens por status/prioridade.
+- **Mutations invalidam explicitamente as queries que elas afetam.** Criar/atualizar/excluir/mover tarefa invalida `tarefasKeys.tarefas(projetoId)` e `tarefasKeys.relatorio(projetoId)` juntos (`use-task-mutations.ts`, `use-tasks.ts`) - o relatório é uma agregação da mesma tabela de tarefas, então qualquer escrita que muda a listagem também pode mudar as contagens por status/prioridade.
 - **SSE (`use-task-events.ts`) invalida as mesmas duas queries quando outro usuário muda o status de uma tarefa** - o board (e o relatório) refletem a mudança de outra pessoa sem precisar de polling. Essa é a peça que justifica não usar um `staleTime` curto por padrão: se a única fonte de "fresh" fosse tempo, ou o app faria polling constante (custo de rede/servidor) ou mostraria dado velho até o próximo refetch manual.
 - **`useProjectReport` usa `staleTime` de 60s**, maior que o global, porque o relatório é uma agregação mais cara de recalcular no backend que uma listagem simples - mas isso só evita refetch redundante se o dialog for aberto/fechado repetidamente sem nada ter mudado; a consistência de verdade continua vindo da invalidação explícita acima, não do tempo.
 
@@ -55,6 +73,6 @@ npm run test:watch    # idem, em modo watch
 npm run test:e2e      # E2E (playwright) - sobe o dev server sozinho via webServer
 ```
 
-- `src/lib/jwt.test.ts` - decodificação do payload do JWT (unidade), incluindo o caso de base64url com acentuação que causava o bug de "login nunca avança pra home".
-- `src/components/project-card.test.tsx`, `src/pages/login-page.test.tsx` - testes de componente.
+- `src/features/auth/jwt.test.ts` - decodificação do payload do JWT (unidade), incluindo o caso de base64url com acentuação que causava o bug de "login nunca avança pra home".
+- `src/features/projetos/components/project-card.test.tsx`, `src/features/auth/components/login-page.test.tsx`, `src/features/board/hooks/use-tasks.test.tsx` - testes de componente/hook.
 - `e2e/login.spec.ts` - fluxo crítico de login → sessão → redirecionamento → listagem de projetos, com a API mockada via `page.route` (sem depender do backend real subir no ambiente de E2E).

@@ -16,7 +16,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./src/shared/test/setup.ts'],
     globals: true,
     // e2e/ roda no runner do Playwright (test/expect com API diferente do
     // vitest) - sem excluir, o glob default do vitest tambem casa *.spec.ts

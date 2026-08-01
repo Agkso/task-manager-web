@@ -25,7 +25,7 @@ export default defineConfig([
     // o padrao esperado da lib e nao vale a pena reestruturar so pro Fast
     // Refresh, que nesses arquivos praticamente nunca dispara mesmo (raramente
     // editados em dev).
-    files: ['src/components/ui/**/*.tsx'],
+    files: ['src/shared/ui/**/*.tsx'],
     rules: {
       'react-refresh/only-export-components': 'off',
     },
