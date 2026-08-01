@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { decodeJwtPayload } from '@/lib/jwt'
 import type { RespostaLogin } from '@/types/api'
 
-interface UsuarioSessao {
+export interface UsuarioSessao {
   usuarioId: number
   nome: string
   email: string
@@ -16,14 +17,16 @@ interface AuthState {
   limparSessao: () => void
 }
 
-/** Decodifica o payload do JWT sem validar assinatura - so pra ler claims (a API e' quem valida de verdade). */
+interface ClaimsToken {
+  usuarioId: number
+  nome: string
+  sub: string
+}
+
+/** Le o payload do JWT sem validar assinatura - so pra exibir na UI (a API e' quem valida de verdade). */
 function decodificarUsuario(token: string): UsuarioSessao {
-  const payload = JSON.parse(atob(token.split('.')[1])) as {
-    usuarioId: number
-    nome: string
-    sub: string
-  }
-  return { usuarioId: payload.usuarioId, nome: payload.nome, email: payload.sub }
+  const claims = decodeJwtPayload<ClaimsToken>(token)
+  return { usuarioId: claims.usuarioId, nome: claims.nome, email: claims.sub }
 }
 
 export const useAuthStore = create<AuthState>()(

@@ -12,6 +12,7 @@ export function useCreateTask(projetoId: number) {
     mutationFn: (dados: RequisicaoTarefa) => tarefasApi.criar(projetoId, dados),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.tarefas(projetoId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.relatorio(projetoId) })
       toast.success('Tarefa criada')
     },
     onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel criar a tarefa')),
@@ -26,6 +27,7 @@ export function useUpdateTask(projetoId: number) {
       tarefasApi.atualizar(projetoId, tarefaId, dados),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.tarefas(projetoId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.relatorio(projetoId) })
       toast.success('Tarefa atualizada')
     },
     onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel atualizar a tarefa')),
@@ -39,6 +41,7 @@ export function useDeleteTask(projetoId: number) {
     mutationFn: (tarefaId: number) => tarefasApi.excluir(projetoId, tarefaId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.tarefas(projetoId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.relatorio(projetoId) })
       toast.success('Tarefa excluida')
     },
     onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel excluir a tarefa')),

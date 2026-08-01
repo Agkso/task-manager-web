@@ -48,6 +48,9 @@ export function useMoveTask(projetoId: number) {
       }
       toast.error(mensagemDeErro(erro, 'Nao foi possivel mover a tarefa'))
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: chave }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: chave })
+      queryClient.invalidateQueries({ queryKey: queryKeys.relatorio(projetoId) })
+    },
   })
 }

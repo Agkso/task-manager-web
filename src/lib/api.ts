@@ -41,12 +41,25 @@ interface RequisicaoComRetry extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
 
+// 401 nessas rotas significa credencial invalida, nao sessao expirada - nao
+// tem token/refreshToken pra tentar renovar ainda (usuario nem esta logado).
+// Sem essa excecao, errar a senha disparava o fluxo de renovacao (que falha
+// por falta de refreshToken) e cai no window.location.href='/login' abaixo,
+// um reload completo no meio do proprio formulario de login em vez do toast
+// de "email ou senha incorretos".
+const ROTAS_AUTH_SEM_RETRY = ['/api/auth/login', '/api/auth/registrar']
+
 api.interceptors.response.use(
   (resposta) => resposta,
   async (erro: AxiosError) => {
     const config = erro.config as RequisicaoComRetry | undefined
 
-    if (erro.response?.status !== 401 || !config || config._retry) {
+    if (
+      erro.response?.status !== 401 ||
+      !config ||
+      config._retry ||
+      ROTAS_AUTH_SEM_RETRY.some((rota) => config.url?.includes(rota))
+    ) {
       return Promise.reject(erro)
     }
     config._retry = true

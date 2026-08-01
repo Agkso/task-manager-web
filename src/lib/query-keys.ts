@@ -13,4 +13,5 @@ export const queryKeys = {
   auditoria: (projetoId: number) => ['auditoria', projetoId] as const,
   tarefas: (projetoId: number) => ['tarefas', projetoId] as const,
   historico: (projetoId: number, tarefaId: number | undefined) => ['historico', projetoId, tarefaId] as const,
+  relatorio: (projetoId: number) => ['relatorio', projetoId] as const,
 }

@@ -8,6 +8,7 @@ import { CreateTaskDialog } from '@/components/board/create-task-dialog'
 import { TaskDetailDialog } from '@/components/board/task-detail-dialog'
 import { MembersDialog } from '@/components/board/members-dialog'
 import { AuditLogDialog } from '@/components/board/audit-log-dialog'
+import { ReportDialog } from '@/components/board/report-dialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useProject } from '@/hooks/use-project'
 import { useTasks, useMoveTask } from '@/hooks/use-tasks'
@@ -49,6 +50,7 @@ export function BoardPage() {
             <>
               <MembersDialog projetoId={projetoId} />
               <AuditLogDialog projetoId={projetoId} />
+              <ReportDialog projetoId={projetoId} />
               <CreateTaskDialog projetoId={projetoId} />
             </>
           }

@@ -6,8 +6,9 @@ import { queryKeys } from '@/lib/query-keys'
 const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
 
 /**
- * Assina o stream SSE de mudancas de status do projeto e invalida a query de
- * tarefas quando algo chega - o board reflete a mudanca de outro usuario sem
+ * Assina o stream SSE de mudancas de status do projeto e invalida as queries
+ * de tarefas e relatorio quando algo chega - o board (e a contagem do
+ * relatorio, que muda junto) refletem a mudanca de outro usuario sem
  * polling. Token vai via query param (?token=) porque EventSource nao deixa
  * mandar header Authorization - o backend aceita esse fallback so pra isso
  * (ver FiltroAutenticacaoJwt no repo do backend).
@@ -24,6 +25,7 @@ export function useTaskEvents(projetoId: number) {
 
     eventSource.addEventListener('status-alterado', () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.tarefas(projetoId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.relatorio(projetoId) })
     })
 
     // EventSource reconecta sozinho em erro de rede/timeout - nao precisa de logica extra aqui
