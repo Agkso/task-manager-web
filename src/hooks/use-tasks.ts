@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { tarefasApi } from '@/lib/resources'
 import { mensagemDeErro } from '@/lib/api'
 import { queryKeys } from '@/lib/query-keys'
+import { COLUNAS } from '@/lib/board-columns'
 import type { PaginaResposta, RespostaTarefa, StatusTarefa } from '@/types/api'
 
 // board mostra tudo de uma vez (sem paginar por coluna) - ver decisoes
@@ -47,6 +48,13 @@ export function useMoveTask(projetoId: number) {
         queryClient.setQueryData(chave, contexto.anterior)
       }
       toast.error(mensagemDeErro(erro, 'Nao foi possivel mover a tarefa'))
+    },
+    // onMutate ja moveu o card na hora (drag-and-drop tem que parecer
+    // instantaneo) - o toast so aqui, depois do servidor confirmar de
+    // verdade, e' o que da a certeza de que salvou (nao so que a UI mudou).
+    onSuccess: (_tarefaAtualizada, { status }) => {
+      const coluna = COLUNAS.find((c) => c.status === status)
+      toast.success(`Tarefa movida para "${coluna?.titulo ?? status}"`)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: chave })
