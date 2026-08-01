@@ -14,7 +14,7 @@ export function ProjectsPage() {
   return (
     <div className="min-h-svh">
       <Navbar />
-      <main className="mx-auto max-w-[88rem] p-6">
+      <main className="w-full p-6">
         <PageHeader title="Seus projetos" actions={<CreateProjectDialog />} />
 
         {isLoading && (

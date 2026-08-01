@@ -42,7 +42,7 @@ export function BoardPage() {
   return (
     <div className="min-h-svh">
       <Navbar />
-      <main className="mx-auto max-w-[88rem] p-6">
+      <main className="w-full p-6">
         <PageHeader
           title={projeto?.nome ?? 'Carregando...'}
           backTo="/projetos"

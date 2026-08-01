@@ -19,7 +19,7 @@ export function Navbar() {
 
   return (
     <header className="border-b">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <div className="flex h-14 w-full items-center justify-between px-6">
         <Link to="/projetos">
           <Logo />
         </Link>
