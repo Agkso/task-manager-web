@@ -20,8 +20,8 @@ export function RegisterPage() {
   return (
     <AuthLayout>
       <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Criar conta</h1>
-        <p className="text-sm text-muted-foreground">Leva menos de um minuto</p>
+        <h1 className="text-3xl font-semibold tracking-tight">Criar conta</h1>
+        <p className="text-base text-muted-foreground">Leva menos de um minuto</p>
       </div>
       <form onSubmit={aoSubmeter} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -50,13 +50,13 @@ export function RegisterPage() {
             onChange={(e) => setSenha(e.target.value)}
             autoComplete="new-password"
           />
-          <p className="text-xs text-muted-foreground">Minimo 8 caracteres</p>
+          <p className="text-sm text-muted-foreground">Minimo 8 caracteres</p>
         </div>
         <Button type="submit" disabled={isPending} className="mt-2">
           {isPending ? 'Criando...' : 'Criar conta'}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-base text-muted-foreground">
         Ja tem conta?{' '}
         <Link to="/login" className="font-medium text-foreground underline underline-offset-4">
           Entrar

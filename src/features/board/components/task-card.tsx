@@ -30,13 +30,13 @@ export function TaskCard({ tarefa, onClick }: { tarefa: RespostaTarefa; onClick:
       )}
     >
       <CardHeader className="px-3">
-        <CardTitle className="text-sm leading-snug font-medium">{tarefa.titulo}</CardTitle>
+        <CardTitle className="text-base leading-snug font-medium">{tarefa.titulo}</CardTitle>
       </CardHeader>
       <CardContent className="flex items-center justify-between px-3">
         <PriorityBadge prioridade={tarefa.prioridade} />
         <div className="flex items-center gap-2">
           {tarefa.prazo && (
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1 text-sm text-muted-foreground">
               <CalendarDays className="h-3 w-3" />
               {formatarData(tarefa.prazo)}
             </span>

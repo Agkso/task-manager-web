@@ -163,11 +163,6 @@
     @apply bg-background text-foreground;
     }
   html {
-    /* +6.25% no root: todo tamanho em rem (texto, padding, altura de botao)
-       escala junto, entao a hierarquia entre text-xs/sm/base continua igual -
-       so para de parecer apertado agora que dialogs/paginas ficaram mais
-       largos (mesmo texto, mais espaco em volta, lia como "letra pequena"). */
-    font-size: 106.25%;
     @apply font-sans;
     }
 }

@@ -22,13 +22,13 @@ export function ForgotPasswordPage() {
     return (
       <AuthLayout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Verifique seu email</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-3xl font-semibold tracking-tight">Verifique seu email</h1>
+          <p className="text-base text-muted-foreground">
             Se existir uma conta com o email <span className="font-medium text-foreground">{email}</span>, voce vai
             receber um link pra redefinir sua senha em instantes.
           </p>
         </div>
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-base text-muted-foreground">
           <Link to="/login" className="font-medium text-foreground underline underline-offset-4">
             Voltar pro login
           </Link>
@@ -40,8 +40,8 @@ export function ForgotPasswordPage() {
   return (
     <AuthLayout>
       <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Esqueceu sua senha?</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-3xl font-semibold tracking-tight">Esqueceu sua senha?</h1>
+        <p className="text-base text-muted-foreground">
           Digite seu email e mandamos um link pra voce escolher uma senha nova.
         </p>
       </div>
@@ -61,7 +61,7 @@ export function ForgotPasswordPage() {
           {isPending ? 'Enviando...' : 'Enviar link de redefinicao'}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-base text-muted-foreground">
         <Link to="/login" className="font-medium text-foreground underline underline-offset-4">
           Voltar pro login
         </Link>

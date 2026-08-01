@@ -10,6 +10,7 @@ import {
 
 import { cn } from "@/shared/lib/utils"
 import { Button, buttonVariants } from "@/shared/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
 function Calendar({
@@ -31,7 +32,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "group/calendar bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
+        "group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(9)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
@@ -51,17 +52,22 @@ function Calendar({
         ),
         month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
         nav: cn(
-          "absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1",
+          // pointer-events-none no proprio nav: ele e' absolute e cobre a
+          // largura toda (pra encostar prev/next nas bordas), sobrepondo o
+          // dropdown de mes/ano que fica no meio - sem isso, a faixa "vazia"
+          // do nav intercepta o clique antes dele chegar no Select por
+          // baixo. Os botoes em si reativam com pointer-events-auto.
+          "pointer-events-none absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1",
           defaultClassNames.nav
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
+          "pointer-events-auto size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
           defaultClassNames.button_previous
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          "size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
+          "pointer-events-auto size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
           defaultClassNames.button_next
         ),
         month_caption: cn(
@@ -69,7 +75,7 @@ function Calendar({
           defaultClassNames.month_caption
         ),
         dropdowns: cn(
-          "flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium",
+          "flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-base font-medium",
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
@@ -83,8 +89,8 @@ function Calendar({
         caption_label: cn(
           "font-medium select-none",
           captionLayout === "label"
-            ? "text-sm"
-            : "flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
+            ? "text-base"
+            : "flex items-center gap-1 rounded-(--cell-radius) text-base [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
           defaultClassNames.caption_label
         ),
         month_grid: cn("w-full border-collapse", defaultClassNames.month_grid),
@@ -164,6 +170,7 @@ function Calendar({
         DayButton: ({ ...props }) => (
           <CalendarDayButton locale={locale} {...props} />
         ),
+        Dropdown: CalendarDropdown,
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
@@ -177,6 +184,50 @@ function Calendar({
       }}
       {...props}
     />
+  )
+}
+
+/**
+ * O Dropdown padrao do react-day-picker (ver node_modules/react-day-picker/
+ * dist/esm/components/Dropdown.js) e' um <select> nativo invisivel por cima
+ * de um label so pra aparencia - o menu ABERTO continua sendo o dropdown
+ * nativo do SO/navegador, que CSS nenhum estiliza (aparencia inconsistente
+ * e "feia" comparado ao resto da UI). Substitui pelo Select do shadcn
+ * (Radix,100% estilizavel) via override do slot `Dropdown`.
+ */
+function CalendarDropdown({
+  options,
+  value,
+  onChange,
+  disabled,
+}: {
+  options?: { value: number; label: string; disabled: boolean }[]
+  value?: string | number | readonly string[]
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>
+  disabled?: boolean
+}) {
+  const selecionado = options?.find((opcao) => opcao.value === Number(value))
+
+  function aoMudar(novoValor: string) {
+    onChange?.({ target: { value: novoValor } } as React.ChangeEvent<HTMLSelectElement>)
+  }
+
+  return (
+    <Select value={String(value ?? '')} onValueChange={aoMudar} disabled={disabled}>
+      <SelectTrigger
+        size="sm"
+        className="h-8 gap-1 border-none bg-transparent px-2 text-base font-medium shadow-none hover:bg-accent focus-visible:ring-0"
+      >
+        <SelectValue>{selecionado?.label}</SelectValue>
+      </SelectTrigger>
+      <SelectContent className="max-h-64 min-w-24">
+        {options?.map((opcao) => (
+          <SelectItem key={opcao.value} value={String(opcao.value)} disabled={opcao.disabled}>
+            {opcao.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
@@ -210,7 +261,7 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70",
+        "relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&>span]:text-sm [&>span]:opacity-70",
         defaultClassNames.day,
         className
       )}

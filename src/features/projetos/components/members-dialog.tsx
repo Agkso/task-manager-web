@@ -53,8 +53,8 @@ export function MembersDialog({ projetoId }: { projetoId: number }) {
           {membros?.map((membro) => (
             <li key={membro.usuarioId} className="flex items-center justify-between rounded-md border px-3 py-2">
               <div>
-                <p className="text-sm font-medium">{membro.nome}</p>
-                <p className="text-xs text-muted-foreground">{membro.email}</p>
+                <p className="text-base font-medium">{membro.nome}</p>
+                <p className="text-sm text-muted-foreground">{membro.email}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">{membro.papel}</Badge>

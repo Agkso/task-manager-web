@@ -47,32 +47,32 @@ export function AuditLogDialog({ projetoId }: { projetoId: number }) {
         </DialogHeader>
 
         {isError && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Voce precisa ser ADMIN deste projeto pra ver a auditoria.
           </p>
         )}
 
-        {isLoading && <p className="text-sm text-muted-foreground">Carregando...</p>}
+        {isLoading && <p className="text-base text-muted-foreground">Carregando...</p>}
 
         {data && data.conteudo.length === 0 && (
-          <p className="text-sm text-muted-foreground">Nenhum evento registrado ainda.</p>
+          <p className="text-base text-muted-foreground">Nenhum evento registrado ainda.</p>
         )}
 
         {data && data.conteudo.length > 0 && (
           <ScrollArea className="h-72">
             <ul className="flex flex-col gap-2">
               {data.conteudo.map((log) => (
-                <li key={log.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+                <li key={log.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-base">
                   <div>
                     <Badge variant="secondary" className="mb-1">
                       {rotulosAcao[log.acao] ?? log.acao}
                     </Badge>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {log.tipoEntidade} #{log.entidadeId}
                       {log.detalhe ? ` · ${log.detalhe}` : ''}
                     </p>
                   </div>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {new Date(log.criadoEm).toLocaleString('pt-BR')}
                   </span>
                 </li>

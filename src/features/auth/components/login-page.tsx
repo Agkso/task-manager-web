@@ -19,8 +19,8 @@ export function LoginPage() {
   return (
     <AuthLayout>
       <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Entrar</h1>
-        <p className="text-sm text-muted-foreground">Acesse seus projetos e tarefas</p>
+        <h1 className="text-3xl font-semibold tracking-tight">Entrar</h1>
+        <p className="text-base text-muted-foreground">Acesse seus projetos e tarefas</p>
       </div>
       <form onSubmit={aoSubmeter} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -37,7 +37,7 @@ export function LoginPage() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="senha">Senha</Label>
-            <Link to="/esqueci-senha" className="text-xs font-medium text-muted-foreground underline underline-offset-4">
+            <Link to="/esqueci-senha" className="text-sm font-medium text-muted-foreground underline underline-offset-4">
               Esqueceu a senha?
             </Link>
           </div>
@@ -54,7 +54,7 @@ export function LoginPage() {
           {isPending ? 'Entrando...' : 'Entrar'}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-base text-muted-foreground">
         Não tem conta?{' '}
         <Link to="/registrar" className="font-medium text-foreground underline underline-offset-4">
           Criar conta

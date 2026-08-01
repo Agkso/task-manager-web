@@ -31,7 +31,7 @@ function LinhaContagem({ rotulo, valor, total, cor }: { rotulo: string; valor: n
   const percentual = total > 0 ? Math.round((valor / total) * 100) : 0
   return (
     <li className="flex flex-col gap-1">
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-base">
         <span>{rotulo}</span>
         <span className="text-muted-foreground">{valor}</span>
       </div>
@@ -63,12 +63,12 @@ export function ReportDialog({ projetoId }: { projetoId: number }) {
           <DialogDescription>Distribuicao das tarefas por status e prioridade.</DialogDescription>
         </DialogHeader>
 
-        {isLoading && <p className="text-sm text-muted-foreground">Carregando...</p>}
+        {isLoading && <p className="text-base text-muted-foreground">Carregando...</p>}
 
         {data && (
           <div className="flex flex-col gap-6">
             <div>
-              <h3 className="mb-2 text-sm font-medium">Por status</h3>
+              <h3 className="mb-2 text-base font-medium">Por status</h3>
               <ul className="flex flex-col gap-3">
                 {COLUNAS.map((coluna) => (
                   <LinhaContagem
@@ -83,7 +83,7 @@ export function ReportDialog({ projetoId }: { projetoId: number }) {
             </div>
 
             <div>
-              <h3 className="mb-2 text-sm font-medium">Por prioridade</h3>
+              <h3 className="mb-2 text-base font-medium">Por prioridade</h3>
               <ul className="flex flex-col gap-3">
                 {(Object.keys(rotulosPrioridade) as Prioridade[]).map((prioridade) => (
                   <LinhaContagem

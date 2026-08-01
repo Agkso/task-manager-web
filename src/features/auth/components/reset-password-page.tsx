@@ -29,12 +29,12 @@ export function ResetPasswordPage() {
     return (
       <AuthLayout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Link invalido</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-3xl font-semibold tracking-tight">Link invalido</h1>
+          <p className="text-base text-muted-foreground">
             Esse link de redefinicao de senha esta incompleto ou invalido. Solicite um novo.
           </p>
         </div>
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-base text-muted-foreground">
           <Link to="/esqueci-senha" className="font-medium text-foreground underline underline-offset-4">
             Pedir novo link
           </Link>
@@ -46,8 +46,8 @@ export function ResetPasswordPage() {
   return (
     <AuthLayout>
       <div className="mb-6 flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Escolha uma nova senha</h1>
-        <p className="text-sm text-muted-foreground">Depois de redefinir, voce precisa entrar de novo.</p>
+        <h1 className="text-3xl font-semibold tracking-tight">Escolha uma nova senha</h1>
+        <p className="text-base text-muted-foreground">Depois de redefinir, voce precisa entrar de novo.</p>
       </div>
       <form onSubmit={aoSubmeter} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">

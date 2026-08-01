@@ -8,6 +8,21 @@ import { Calendar } from '@/shared/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover'
 
 const FORMATO_EXIBICAO = 'dd/MM/yyyy'
+const DIGITOS_MAXIMOS = 8 // dd(2) + MM(2) + yyyy(4)
+
+/**
+ * Mascara de digitacao: pega so os digitos do que foi digitado (ignora
+ * qualquer '/' que o navegador ja tenha no valor, inclusive um que a propria
+ * mascara inseriu na tecla anterior) e reconstroi "dd/MM/yyyy" do zero a
+ * cada tecla. Sem isso, o campo aceitava digitar "25122026" (sem barra) e
+ * ficava com esse texto sem nunca virar uma data valida pro parse - o valor
+ * nunca chegava no formulario, mas parecia "digitado" pro usuario (bug real:
+ * "salvo digitando fica errado", porque nao ficava salvo nenhum).
+ */
+function aplicarMascaraData(valorDigitado: string): string {
+  const digitos = valorDigitado.replace(/\D/g, '').slice(0, DIGITOS_MAXIMOS)
+  return [digitos.slice(0, 2), digitos.slice(2, 4), digitos.slice(4, 8)].filter(Boolean).join('/')
+}
 
 /**
  * yyyy-MM-dd a partir das partes locais da data, nao Date.toISOString()
@@ -57,16 +72,16 @@ export function DatePicker({
   }
 
   function aoDigitar(evento: ChangeEvent<HTMLInputElement>) {
-    const novoTexto = evento.target.value
-    setTexto(novoTexto)
+    const textoMascarado = aplicarMascaraData(evento.target.value)
+    setTexto(textoMascarado)
 
-    if (novoTexto === '') {
+    if (textoMascarado === '') {
       onChange('')
       return
     }
 
-    if (novoTexto.length === FORMATO_EXIBICAO.length) {
-      const dataDigitada = parse(novoTexto, FORMATO_EXIBICAO, new Date())
+    if (textoMascarado.length === FORMATO_EXIBICAO.length) {
+      const dataDigitada = parse(textoMascarado, FORMATO_EXIBICAO, new Date())
       if (isValid(dataDigitada)) {
         onChange(paraIsoLocal(dataDigitada))
       }
@@ -87,6 +102,7 @@ export function DatePicker({
         placeholder={placeholder}
         inputMode="numeric"
         autoComplete="off"
+        maxLength={FORMATO_EXIBICAO.length}
       />
       <Popover open={aberto} onOpenChange={setAberto}>
         <PopoverTrigger asChild>

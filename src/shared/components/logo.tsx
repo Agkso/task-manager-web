@@ -21,7 +21,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn('inline-flex items-center gap-2 text-brand', className)}>
       <LogoMark />
-      <span className="text-base font-semibold tracking-tight text-foreground">Task Manager</span>
+      <span className="text-lg font-semibold tracking-tight text-foreground">Task Manager</span>
     </span>
   )
 }

@@ -19,15 +19,15 @@ export function ProjectCard({ projeto }: { projeto: RespostaProjeto }) {
         <div className="flex items-start justify-between gap-3">
           <h3 className="line-clamp-1 font-semibold tracking-tight">{projeto.nome}</h3>
           <Avatar className="h-8 w-8 shrink-0">
-            <AvatarFallback className="bg-brand/15 text-xs font-medium text-brand">
+            <AvatarFallback className="bg-brand/15 text-sm font-medium text-brand">
               {iniciais(projeto.nome)}
             </AvatarFallback>
           </Avatar>
         </div>
-        <p className="line-clamp-2 min-h-10 text-sm text-muted-foreground">
+        <p className="line-clamp-2 min-h-10 text-base text-muted-foreground">
           {projeto.descricao || 'Sem descricao'}
         </p>
-        <p className="text-xs text-muted-foreground">Dono: {projeto.donoNome}</p>
+        <p className="text-sm text-muted-foreground">Dono: {projeto.donoNome}</p>
       </CardContent>
     </Card>
   )

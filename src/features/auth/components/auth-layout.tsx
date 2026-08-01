@@ -14,10 +14,10 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         />
         <span className="relative inline-flex items-center gap-2 text-primary-foreground">
           <LogoMark className="h-7 w-7" />
-          <span className="text-lg font-semibold tracking-tight">Task Manager</span>
+          <span className="text-xl font-semibold tracking-tight">Task Manager</span>
         </span>
         <blockquote className="relative max-w-md text-primary-foreground/90">
-          <p className="text-2xl leading-snug font-medium text-balance">
+          <p className="text-3xl leading-snug font-medium text-balance">
             Projetos organizados por status, com board em tempo real pro time inteiro ver a mesma coisa.
           </p>
         </blockquote>
@@ -28,7 +28,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
           <div className="mb-8 flex justify-center lg:hidden">
             <span className="inline-flex items-center gap-2 text-brand">
               <LogoMark />
-              <span className="text-base font-semibold tracking-tight text-foreground">Task Manager</span>
+              <span className="text-lg font-semibold tracking-tight text-foreground">Task Manager</span>
             </span>
           </div>
           {children}

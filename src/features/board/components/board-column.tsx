@@ -32,15 +32,15 @@ export function BoardColumn({
     >
       <div className="flex items-center gap-2 px-1">
         <span className={cn('h-2 w-2 rounded-full', corPonto)} />
-        <h2 className="text-sm font-semibold">{titulo}</h2>
-        <span className="ml-auto text-xs text-muted-foreground">{tarefas.length}</span>
+        <h2 className="text-base font-semibold">{titulo}</h2>
+        <span className="ml-auto text-sm text-muted-foreground">{tarefas.length}</span>
       </div>
       <div className="flex flex-col gap-2">
         {tarefas.map((tarefa) => (
           <TaskCard key={tarefa.id} tarefa={tarefa} onClick={() => onSelecionarTarefa(tarefa)} />
         ))}
         {tarefas.length === 0 && (
-          <div className="rounded-md border border-dashed py-6 text-center text-xs text-muted-foreground">
+          <div className="rounded-md border border-dashed py-6 text-center text-sm text-muted-foreground">
             Arraste uma tarefa pra ca
           </div>
         )}

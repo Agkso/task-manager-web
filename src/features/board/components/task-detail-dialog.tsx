@@ -119,9 +119,9 @@ function TaskDetailForm({
         <>
           <Separator />
           <div>
-            <p className="mb-2 text-sm font-medium">Historico</p>
+            <p className="mb-2 text-base font-medium">Historico</p>
             <ScrollArea className="h-24">
-              <ul className="flex flex-col gap-1 text-xs text-muted-foreground">
+              <ul className="flex flex-col gap-1 text-sm text-muted-foreground">
                 {historico.map((item) => (
                   <li key={item.id}>
                     {item.statusAnterior} → {item.statusNovo} por {item.usuarioNome} em{' '}
