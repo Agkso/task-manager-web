@@ -3,11 +3,11 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { toast } from 'sonner'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { ReactNode } from 'react'
-import { useMoveTask } from './use-tasks'
-import { tarefasApi } from '@/features/board/api/tarefas-api'
-import type { RespostaTarefa } from '@/features/board/types'
+import { useMoveTask } from '../hooks/use-tasks'
+import { tarefasApi } from '@/features/tarefas/api/tarefas-api'
+import type { RespostaTarefa } from '@/features/tarefas/types'
 
-vi.mock('@/features/board/api/tarefas-api', () => ({
+vi.mock('@/features/tarefas/api/tarefas-api', () => ({
   tarefasApi: {
     mudarStatus: vi.fn(),
   },

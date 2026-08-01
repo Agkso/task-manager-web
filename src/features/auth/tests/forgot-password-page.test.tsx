@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { ForgotPasswordPage } from './forgot-password-page'
+import { ForgotPasswordPage } from '../components/forgot-password-page'
 import { useForgotPassword } from '@/features/auth/hooks/use-auth'
 
 vi.mock('@/features/auth/hooks/use-auth', () => ({

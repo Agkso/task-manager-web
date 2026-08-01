@@ -9,9 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog'
-import { useProjectReport } from '@/features/board/hooks/use-project-report'
-import { COLUNAS } from '@/features/board/board-columns'
-import type { Prioridade, StatusTarefa } from '@/features/board/types'
+import { useProjectReport } from '@/features/tarefas/hooks/use-project-report'
+import { COLUNAS } from '@/features/tarefas/board-columns'
+import type { Prioridade, StatusTarefa } from '@/features/tarefas/types'
 
 const rotulosPrioridade: Record<Prioridade, string> = {
   LOW: 'Baixa',

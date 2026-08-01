@@ -2,8 +2,8 @@ import { useDraggable } from '@dnd-kit/core'
 import { CalendarDays } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar'
-import { PriorityBadge } from '@/features/board/components/priority-badge'
-import type { RespostaTarefa } from '@/features/board/types'
+import { PriorityBadge } from '@/features/tarefas/components/priority-badge'
+import type { RespostaTarefa } from '@/features/tarefas/types'
 import { cn } from '@/shared/lib/utils'
 
 function formatarData(iso: string) {

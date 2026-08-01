@@ -7,7 +7,7 @@ import type {
   RespostaHistoricoTarefa,
   RespostaRelatorio,
   RespostaTarefa,
-} from '@/features/board/types'
+} from '@/features/tarefas/types'
 
 export const tarefasApi = {
   listar: (projetoId: number, filtro: FiltroTarefas = {}) =>

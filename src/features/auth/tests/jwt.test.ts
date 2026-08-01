@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { decodeJwtPayload } from './jwt'
+import { decodeJwtPayload } from '../jwt'
 
 interface ClaimsToken {
   usuarioId: number

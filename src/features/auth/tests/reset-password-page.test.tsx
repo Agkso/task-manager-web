@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { toast } from 'sonner'
-import { ResetPasswordPage } from './reset-password-page'
+import { ResetPasswordPage } from '../components/reset-password-page'
 import { useResetPassword } from '@/features/auth/hooks/use-auth'
 
 vi.mock('@/features/auth/hooks/use-auth', () => ({

@@ -15,9 +15,9 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog'
 import { useProjectMembers } from '@/features/projetos/hooks/use-project-members'
-import { useCreateTask } from '@/features/board/hooks/use-task-mutations'
-import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/features/board/options'
-import type { Prioridade } from '@/features/board/types'
+import { useCreateTask } from '@/features/tarefas/hooks/use-task-mutations'
+import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/features/tarefas/options'
+import type { Prioridade } from '@/features/tarefas/types'
 
 export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
   const [aberto, setAberto] = useState(false)

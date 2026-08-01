@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/features/auth/store/auth-store'
-import { tarefasKeys } from '@/features/board/api/query-keys'
+import { tarefasKeys } from '@/features/tarefas/api/query-keys'
 
 const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'
 

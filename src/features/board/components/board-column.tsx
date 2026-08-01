@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
-import { TaskCard } from '@/features/board/components/task-card'
-import type { RespostaTarefa, StatusTarefa } from '@/features/board/types'
+import { TaskCard } from '@/features/tarefas/components/task-card'
+import type { RespostaTarefa, StatusTarefa } from '@/features/tarefas/types'
 import { cn } from '@/shared/lib/utils'
 
 export function BoardColumn({

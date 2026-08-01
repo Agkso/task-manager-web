@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { LoginPage } from './login-page'
+import { LoginPage } from '../components/login-page'
 import { useLogin } from '@/features/auth/hooks/use-auth'
 
 vi.mock('@/features/auth/hooks/use-auth', () => ({

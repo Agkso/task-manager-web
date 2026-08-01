@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { ProjectCard } from './project-card'
+import { ProjectCard } from '../components/project-card'
 import type { RespostaProjeto } from '@/features/projetos/types'
 
 function projetoDeTeste(sobrescritas: Partial<RespostaProjeto> = {}): RespostaProjeto {

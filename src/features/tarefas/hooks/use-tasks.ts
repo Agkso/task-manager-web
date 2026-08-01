@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { tarefasApi } from '@/features/board/api/tarefas-api'
+import { tarefasApi } from '@/features/tarefas/api/tarefas-api'
 import { mensagemDeErro } from '@/shared/lib/api'
-import { tarefasKeys } from '@/features/board/api/query-keys'
-import { COLUNAS } from '@/features/board/board-columns'
+import { tarefasKeys } from '@/features/tarefas/api/query-keys'
+import { COLUNAS } from '@/features/tarefas/board-columns'
 import type { PaginaResposta } from '@/shared/types/api'
-import type { RespostaTarefa, StatusTarefa } from '@/features/board/types'
+import type { RespostaTarefa, StatusTarefa } from '@/features/tarefas/types'
 
 // board mostra tudo de uma vez (sem paginar por coluna) - ver decisoes
 // tecnicas do frontend pro porque disso ser aceitavel pro tamanho de

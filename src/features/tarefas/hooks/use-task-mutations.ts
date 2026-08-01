@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { tarefasApi } from '@/features/board/api/tarefas-api'
+import { tarefasApi } from '@/features/tarefas/api/tarefas-api'
 import { mensagemDeErro } from '@/shared/lib/api'
-import { tarefasKeys } from '@/features/board/api/query-keys'
-import type { RequisicaoTarefa } from '@/features/board/types'
+import { tarefasKeys } from '@/features/tarefas/api/query-keys'
+import type { RequisicaoTarefa } from '@/features/tarefas/types'
 
 export function useCreateTask(projetoId: number) {
   const queryClient = useQueryClient()

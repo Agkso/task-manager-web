@@ -36,9 +36,11 @@ Organização **por feature/domínio**, não por tipo de arquivo - `hooks/`, `li
 src/
   app/               bootstrap (main.tsx, App.tsx/rotas, index.css)
   features/
-    auth/            login, registro, sessão (zustand + persist), decode de JWT
-    projetos/         listagem/CRUD de projeto, membros, auditoria
-    board/            board de tarefas, dialogs, relatório, eventos SSE
+    auth/            login, registro, esqueci/redefinir senha, sessão (zustand + persist), decode de JWT
+    projetos/        listagem/CRUD de projeto, membros, auditoria
+    board/           so o shell do kanban (board-page, colunas, drag-and-drop)
+    tarefas/         tudo sobre a tarefa em si: dialogs de criar/editar/detalhe,
+                     card, badge de prioridade, relatório, eventos SSE
   shared/
     ui/              componentes shadcn (Button, Dialog, Select, ...) - não editados a mão
     components/      Logo, Navbar, PageHeader, DatePicker, EmptyState, SelectField
@@ -46,13 +48,16 @@ src/
     types/           só o que é realmente cross-feature (PaginaResposta<T>, ProblemDetail)
 ```
 
-Dentro de cada feature: `components/` (UI), `hooks/` (dados/mutations), `api/` (chamadas HTTP + query keys daquele domínio), e `types.ts`/`options.ts` na raiz da feature quando não justificam uma subpasta.
+`board` e `tarefas` são features separadas de propósito: `board` é só o layout/mecânica do kanban (colunas, dnd), enquanto tudo que é sobre a entidade tarefa (CRUD, status, prioridade, histórico, relatório) mora em `tarefas` - `board` importa de `tarefas` pra renderizar (ex.: `useTasks`, `TaskCard`), não o contrário.
+
+Dentro de cada feature: `components/` (UI), `hooks/` (dados/mutations), `api/` (chamadas HTTP + query keys daquele domínio), `tests/` (todo `*.test.*` da feature, separado do código fonte) e `types.ts`/`options.ts` na raiz da feature quando não justificam uma subpasta.
 
 - `src/shared/lib/api.ts` - instância axios com interceptor de `Authorization` e renovação automática de token via refresh token.
 - `src/features/auth/store/auth-store.ts` + `src/features/auth/hooks/use-auth.ts` - sessão do usuário (zustand + persist), com uma API parecida com `useSession()`/`signIn()`/`signOut()` do NextAuth (não dá pra usar a lib de verdade aqui - é feita pra Next.js).
-- `src/features/projetos/api/projetos-api.ts` e `src/features/board/api/tarefas-api.ts` - chamadas HTTP por domínio (cada um já era um recurso de API separado no backend).
-- `src/features/board/hooks/use-task-events.ts` - assina o stream SSE de mudança de status de tarefa e invalida a query do React Query correspondente.
-- `src/features/board/components/` - board (colunas, cards, dialogs de criar/editar tarefa, relatório).
+- `src/features/projetos/api/projetos-api.ts` e `src/features/tarefas/api/tarefas-api.ts` - chamadas HTTP por domínio (cada um já era um recurso de API separado no backend).
+- `src/features/tarefas/hooks/use-task-events.ts` - assina o stream SSE de mudança de status de tarefa e invalida a query do React Query correspondente.
+- `src/features/tarefas/components/` - card, badge de prioridade, dialogs de criar/editar/detalhe de tarefa, relatório.
+- `src/features/board/components/` - board-page e board-column (o shell do kanban).
 
 ## Cache e invalidação (listagem de tarefas e relatório)
 
@@ -73,6 +78,6 @@ npm run test:watch    # idem, em modo watch
 npm run test:e2e      # E2E (playwright) - sobe o dev server sozinho via webServer
 ```
 
-- `src/features/auth/jwt.test.ts` - decodificação do payload do JWT (unidade), incluindo o caso de base64url com acentuação que causava o bug de "login nunca avança pra home".
-- `src/features/projetos/components/project-card.test.tsx`, `src/features/auth/components/login-page.test.tsx`, `src/features/board/hooks/use-tasks.test.tsx` - testes de componente/hook.
+- `src/features/auth/tests/jwt.test.ts` - decodificação do payload do JWT (unidade), incluindo o caso de base64url com acentuação que causava o bug de "login nunca avança pra home".
+- `src/features/projetos/tests/project-card.test.tsx`, `src/features/auth/tests/login-page.test.tsx`, `src/features/tarefas/tests/use-tasks.test.tsx` - testes de componente/hook. Cada feature tem sua própria pasta `tests/`.
 - `e2e/login.spec.ts` - fluxo crítico de login → sessão → redirecionamento → listagem de projetos, com a API mockada via `page.route` (sem depender do backend real subir no ambiente de E2E).

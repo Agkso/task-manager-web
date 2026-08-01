@@ -1,4 +1,4 @@
-import type { Prioridade } from '@/features/board/types'
+import type { Prioridade } from '@/features/tarefas/types'
 
 export const OPCOES_PRIORIDADE: { value: Prioridade; label: string }[] = [
   { value: 'LOW', label: 'Baixa' },

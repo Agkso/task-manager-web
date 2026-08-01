@@ -21,10 +21,10 @@ import {
 } from '@/shared/ui/alert-dialog'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { useProjectMembers } from '@/features/projetos/hooks/use-project-members'
-import { useUpdateTask, useDeleteTask } from '@/features/board/hooks/use-task-mutations'
-import { useTaskHistory } from '@/features/board/hooks/use-task-history'
-import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/features/board/options'
-import type { Prioridade, RespostaTarefa } from '@/features/board/types'
+import { useUpdateTask, useDeleteTask } from '@/features/tarefas/hooks/use-task-mutations'
+import { useTaskHistory } from '@/features/tarefas/hooks/use-task-history'
+import { OPCOES_PRIORIDADE, SEM_RESPONSAVEL } from '@/features/tarefas/options'
+import type { Prioridade, RespostaTarefa } from '@/features/tarefas/types'
 
 function paraInputDate(iso: string | null) {
   return iso ? iso.slice(0, 10) : ''

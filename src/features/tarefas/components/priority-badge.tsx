@@ -1,5 +1,5 @@
 import { Badge } from '@/shared/ui/badge'
-import type { Prioridade } from '@/features/board/types'
+import type { Prioridade } from '@/features/tarefas/types'
 
 const estilos: Record<Prioridade, string> = {
   LOW: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
