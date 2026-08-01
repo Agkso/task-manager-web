@@ -14,3 +14,12 @@ export interface RequisicaoRegistro {
   email: string
   senha: string
 }
+
+export interface RequisicaoEsqueciSenha {
+  email: string
+}
+
+export interface RequisicaoRedefinirSenha {
+  token: string
+  novaSenha: string
+}

@@ -3,7 +3,13 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api, mensagemDeErro } from '@/shared/lib/api'
 import { useAuthStore } from '@/features/auth/store/auth-store'
-import type { RequisicaoLogin, RequisicaoRegistro, RespostaLogin } from '@/features/auth/types'
+import type {
+  RequisicaoEsqueciSenha,
+  RequisicaoLogin,
+  RequisicaoRedefinirSenha,
+  RequisicaoRegistro,
+  RespostaLogin,
+} from '@/features/auth/types'
 
 /**
  * Le a sessao atual. Selectors individuais (nao `useAuthStore()` puro) de
@@ -73,5 +79,32 @@ export function useLogout() {
       }
     },
     onSuccess: () => toast.success('Sessao encerrada'),
+  })
+}
+
+/**
+ * Sem onSuccess com toast/navegacao aqui de proposito - a resposta do
+ * backend e' sempre a mesma exista ou nao o email (ver javadoc de
+ * SolicitarRedefinicaoSenhaUseCase no backend, evita revelar quais emails
+ * tem conta), entao quem decide a mensagem fixa de confirmacao e' a propria
+ * pagina (ForgotPasswordPage), nao esse hook.
+ */
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (requisicao: RequisicaoEsqueciSenha) => api.post('/api/auth/esqueci-senha', requisicao),
+    onError: (erro) => toast.error(mensagemDeErro(erro, 'Nao foi possivel processar o pedido')),
+  })
+}
+
+export function useResetPassword() {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: (requisicao: RequisicaoRedefinirSenha) => api.post('/api/auth/redefinir-senha', requisicao),
+    onSuccess: () => {
+      toast.success('Senha redefinida. Faca login com a nova senha.')
+      navigate('/login')
+    },
+    onError: (erro) => toast.error(mensagemDeErro(erro, 'Link invalido ou expirado. Solicite um novo.')),
   })
 }

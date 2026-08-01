@@ -35,7 +35,12 @@ export function LoginPage() {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="senha">Senha</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="senha">Senha</Label>
+            <Link to="/esqueci-senha" className="text-xs font-medium text-muted-foreground underline underline-offset-4">
+              Esqueceu a senha?
+            </Link>
+          </div>
           <Input
             id="senha"
             type="password"

@@ -24,6 +24,8 @@ const rotulosAcao: Record<string, string> = {
   TAREFA_EXCLUIDA: 'Tarefa excluida',
   USUARIO_REGISTRADO: 'Usuario registrado',
   LOGIN_SUCEDIDO: 'Login',
+  SENHA_RESET_SOLICITADO: 'Redefinicao de senha solicitada',
+  SENHA_REDEFINIDA: 'Senha redefinida',
 }
 
 export function AuditLogDialog({ projetoId }: { projetoId: number }) {

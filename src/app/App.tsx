@@ -5,6 +5,8 @@ import { queryClient } from '@/shared/lib/query-client'
 import { ProtectedRoute } from '@/features/auth/components/protected-route'
 import { LoginPage } from '@/features/auth/components/login-page'
 import { RegisterPage } from '@/features/auth/components/register-page'
+import { ForgotPasswordPage } from '@/features/auth/components/forgot-password-page'
+import { ResetPasswordPage } from '@/features/auth/components/reset-password-page'
 import { ProjectsPage } from '@/features/projetos/components/projects-page'
 import { BoardPage } from '@/features/board/components/board-page'
 
@@ -15,6 +17,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registrar" element={<RegisterPage />} />
+          <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
+          <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/projetos" element={<ProjectsPage />} />
             <Route path="/projetos/:projetoId" element={<BoardPage />} />
