@@ -62,7 +62,15 @@
  * do board sem depender de emoji ou icone extra.
  */
 :root {
-    --background: oklch(0.99 0.003 280);
+    /*
+     * background fica visivelmente abaixo de card/popover de proposito (0.965
+     * vs 1.0 de luminancia) - antes os dois estavam quase identicos (0.99 vs
+     * 1.0), entao card/dialog nao se destacavam do fundo da pagina e dependiam
+     * so do ring de 10% de opacidade pra separar, o que lia como "tudo
+     * branco". Com essa diferenca a pagina vira canvas e os cards viram
+     * superficie de verdade por cima dela.
+     */
+    --background: oklch(0.965 0.007 280);
     --foreground: oklch(0.18 0.02 280);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.18 0.02 280);
@@ -72,13 +80,13 @@
     --primary-foreground: oklch(0.98 0.005 280);
     --secondary: oklch(0.95 0.01 280);
     --secondary-foreground: oklch(0.25 0.03 280);
-    --muted: oklch(0.96 0.008 280);
+    --muted: oklch(0.945 0.009 280);
     --muted-foreground: oklch(0.52 0.02 280);
     --accent: oklch(0.94 0.035 280);
     --accent-foreground: oklch(0.3 0.06 280);
     --destructive: oklch(0.58 0.22 25);
-    --border: oklch(0.9 0.012 280);
-    --input: oklch(0.9 0.012 280);
+    --border: oklch(0.87 0.014 280);
+    --input: oklch(0.87 0.014 280);
     --ring: oklch(0.51 0.19 279);
     --brand: oklch(0.51 0.19 279);
     --brand-foreground: oklch(0.98 0.005 280);

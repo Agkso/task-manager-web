@@ -13,7 +13,7 @@ function iniciais(nome: string) {
 /** Puramente apresentacional - dados vem prontos via props, nenhum fetch aqui. */
 export function ProjectCard({ projeto }: { projeto: RespostaProjeto }) {
   return (
-    <Card className="h-full gap-0 overflow-hidden py-0 transition-all hover:-translate-y-0.5 hover:shadow-lg">
+    <Card className="h-full gap-0 overflow-hidden py-0 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
       <div className="h-1.5 bg-gradient-to-r from-brand to-brand/40" />
       <CardContent className="flex flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-3">

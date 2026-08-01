@@ -61,7 +61,7 @@ export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
           Nova tarefa
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-lg">
         <form onSubmit={aoSubmeter}>
           <DialogHeader>
             <DialogTitle>Nova tarefa</DialogTitle>

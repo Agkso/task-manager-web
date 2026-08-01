@@ -43,7 +43,7 @@ export function MembersDialog({ projetoId }: { projetoId: number }) {
           Membros
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Membros do projeto</DialogTitle>
           <DialogDescription>Apenas ADMIN pode adicionar ou remover.</DialogDescription>
