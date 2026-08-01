@@ -41,6 +41,7 @@
     --color-background: var(--background);
     --color-brand: var(--brand);
     --color-brand-foreground: var(--brand-foreground);
+    --color-brand-accent: var(--brand-accent);
     --color-status-todo: var(--status-todo);
     --color-status-progress: var(--status-progress);
     --color-status-done: var(--status-done);
@@ -70,28 +71,33 @@
      * branco". Com essa diferenca a pagina vira canvas e os cards viram
      * superficie de verdade por cima dela.
      */
-    --background: oklch(0.965 0.007 280);
-    --foreground: oklch(0.18 0.02 280);
+    --background: oklch(0.965 0.007 138);
+    --foreground: oklch(0.18 0.02 138);
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.18 0.02 280);
+    --card-foreground: oklch(0.18 0.02 138);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.18 0.02 280);
-    --primary: oklch(0.51 0.19 279);
-    --primary-foreground: oklch(0.98 0.005 280);
-    --secondary: oklch(0.95 0.01 280);
-    --secondary-foreground: oklch(0.25 0.03 280);
-    --muted: oklch(0.945 0.009 280);
-    --muted-foreground: oklch(0.52 0.02 280);
-    --accent: oklch(0.94 0.035 280);
-    --accent-foreground: oklch(0.3 0.06 280);
+    --popover-foreground: oklch(0.18 0.02 138);
+    --primary: oklch(0.523 0.073 137.7);
+    --primary-foreground: oklch(0.97 0.01 138);
+    --secondary: oklch(0.95 0.01 138);
+    --secondary-foreground: oklch(0.25 0.03 138);
+    --muted: oklch(0.945 0.009 138);
+    --muted-foreground: oklch(0.52 0.02 138);
+    --accent: oklch(0.94 0.035 138);
+    --accent-foreground: oklch(0.3 0.06 138);
     --destructive: oklch(0.58 0.22 25);
-    --border: oklch(0.87 0.014 280);
-    --input: oklch(0.87 0.014 280);
-    --ring: oklch(0.51 0.19 279);
-    --brand: oklch(0.51 0.19 279);
-    --brand-foreground: oklch(0.98 0.005 280);
-    --status-todo: oklch(0.6 0.02 280);
-    --status-progress: oklch(0.6 0.19 279);
+    --border: oklch(0.87 0.014 138);
+    --input: oklch(0.87 0.014 138);
+    --ring: oklch(0.523 0.073 137.7);
+    --brand: oklch(0.523 0.073 137.7);
+    --brand-foreground: oklch(0.97 0.01 138);
+    /* segunda cor da marca (coral, #E4694A) - usada com moderacao: barra do
+       logo, faixa do ProjectCard, e o status "Em andamento" (que antes
+       reaproveitava a cor de marca - agora que a marca e' verde, colidiria
+       visualmente com "Concluido", tambem verde). */
+    --brand-accent: oklch(0.664 0.16 35.3);
+    --status-todo: oklch(0.6 0.02 138);
+    --status-progress: oklch(0.664 0.16 35.3);
     --status-done: oklch(0.6 0.15 155);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
@@ -101,8 +107,8 @@
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.51 0.19 279);
-    --sidebar-primary-foreground: oklch(0.98 0.005 280);
+    --sidebar-primary: oklch(0.523 0.073 137.7);
+    --sidebar-primary-foreground: oklch(0.97 0.01 138);
     --sidebar-accent: oklch(0.97 0 0);
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
@@ -110,28 +116,29 @@
 }
 
 .dark {
-    --background: oklch(0.16 0.016 280);
-    --foreground: oklch(0.96 0.01 280);
-    --card: oklch(0.21 0.02 280);
-    --card-foreground: oklch(0.96 0.01 280);
-    --popover: oklch(0.21 0.02 280);
-    --popover-foreground: oklch(0.96 0.01 280);
-    --primary: oklch(0.72 0.17 279);
-    --primary-foreground: oklch(0.16 0.02 280);
-    --secondary: oklch(0.27 0.02 280);
-    --secondary-foreground: oklch(0.95 0.01 280);
-    --muted: oklch(0.25 0.02 280);
-    --muted-foreground: oklch(0.68 0.02 280);
-    --accent: oklch(0.3 0.05 280);
-    --accent-foreground: oklch(0.95 0.02 280);
+    --background: oklch(0.16 0.016 138);
+    --foreground: oklch(0.96 0.01 138);
+    --card: oklch(0.21 0.02 138);
+    --card-foreground: oklch(0.96 0.01 138);
+    --popover: oklch(0.21 0.02 138);
+    --popover-foreground: oklch(0.96 0.01 138);
+    --primary: oklch(0.74 0.1 138);
+    --primary-foreground: oklch(0.16 0.02 138);
+    --secondary: oklch(0.27 0.02 138);
+    --secondary-foreground: oklch(0.95 0.01 138);
+    --muted: oklch(0.25 0.02 138);
+    --muted-foreground: oklch(0.68 0.02 138);
+    --accent: oklch(0.3 0.05 138);
+    --accent-foreground: oklch(0.95 0.02 138);
     --destructive: oklch(0.7 0.19 22.216);
     --border: oklch(1 0 0 / 12%);
     --input: oklch(1 0 0 / 16%);
-    --ring: oklch(0.72 0.17 279);
-    --brand: oklch(0.72 0.17 279);
-    --brand-foreground: oklch(0.16 0.02 280);
-    --status-todo: oklch(0.7 0.015 280);
-    --status-progress: oklch(0.72 0.17 279);
+    --ring: oklch(0.74 0.1 138);
+    --brand: oklch(0.74 0.1 138);
+    --brand-foreground: oklch(0.16 0.02 138);
+    --brand-accent: oklch(0.72 0.17 35.3);
+    --status-todo: oklch(0.7 0.015 138);
+    --status-progress: oklch(0.72 0.17 35.3);
     --status-done: oklch(0.72 0.14 155);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
@@ -140,8 +147,8 @@
     --chart-5: oklch(0.269 0 0);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.72 0.17 279);
-    --sidebar-primary-foreground: oklch(0.16 0.02 280);
+    --sidebar-primary: oklch(0.74 0.1 138);
+    --sidebar-primary-foreground: oklch(0.16 0.02 138);
     --sidebar-accent: oklch(0.269 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
@@ -156,6 +163,11 @@
     @apply bg-background text-foreground;
     }
   html {
+    /* +6.25% no root: todo tamanho em rem (texto, padding, altura de botao)
+       escala junto, entao a hierarquia entre text-xs/sm/base continua igual -
+       so para de parecer apertado agora que dialogs/paginas ficaram mais
+       largos (mesmo texto, mais espaco em volta, lia como "letra pequena"). */
+    font-size: 106.25%;
     @apply font-sans;
     }
 }

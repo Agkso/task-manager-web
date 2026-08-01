@@ -75,7 +75,7 @@ export function CreateTaskDialog({ projetoId }: { projetoId: number }) {
               <Label htmlFor="descricao-tarefa">Descricao</Label>
               <Textarea id="descricao-tarefa" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <SelectField
                 id="prioridade-tarefa"
                 label="Prioridade"

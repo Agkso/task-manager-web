@@ -14,11 +14,11 @@ export function ProjectsPage() {
   return (
     <div className="min-h-svh">
       <Navbar />
-      <main className="mx-auto max-w-6xl p-6">
+      <main className="mx-auto max-w-[88rem] p-6">
         <PageHeader title="Seus projetos" actions={<CreateProjectDialog />} />
 
         {isLoading && (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 3 }).map((_, i) => (
               <Skeleton key={i} className="h-36 rounded-xl" />
             ))}
@@ -33,7 +33,7 @@ export function ProjectsPage() {
           />
         )}
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {projetos?.map((projeto) => (
             <Link key={projeto.id} to={`/projetos/${projeto.id}`}>
               <ProjectCard projeto={projeto} />

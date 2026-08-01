@@ -6,10 +6,11 @@ import { cn } from '@/lib/utils'
  * aparece sozinho (favicon usa o mesmo desenho), entao vale ser algo
  * desenhado pra este produto e nao emprestado.
  */
+/** A barra mais curta usa a segunda cor da marca (coral) - as outras duas ficam em currentColor (verde) com opacidade, igual antes. */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={cn('h-6 w-6', className)} aria-hidden="true">
-      <rect x="2" y="9" width="5" height="13" rx="1.5" fill="currentColor" opacity="0.5" />
+      <rect x="2" y="9" width="5" height="13" rx="1.5" fill="var(--brand-accent)" />
       <rect x="9.5" y="2" width="5" height="20" rx="1.5" fill="currentColor" />
       <rect x="17" y="6" width="5" height="16" rx="1.5" fill="currentColor" opacity="0.75" />
     </svg>

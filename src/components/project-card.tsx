@@ -14,7 +14,7 @@ function iniciais(nome: string) {
 export function ProjectCard({ projeto }: { projeto: RespostaProjeto }) {
   return (
     <Card className="h-full gap-0 overflow-hidden py-0 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
-      <div className="h-1.5 bg-gradient-to-r from-brand to-brand/40" />
+      <div className="h-1.5 bg-gradient-to-r from-brand to-brand-accent" />
       <CardContent className="flex flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-3">
           <h3 className="line-clamp-1 font-semibold tracking-tight">{projeto.nome}</h3>
